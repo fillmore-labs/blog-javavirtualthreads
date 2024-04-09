@@ -1,0 +1,28 @@
+---
+name: Test
+"on":
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    permissions:
+      checks: write
+      contents: read
+      pull-requests: read
+      statuses: write
+    steps:
+      - name: ✔ Check out
+        uses: actions/checkout@v4
+      - name: 🌿 Set up Bazel
+        uses: bazel-contrib/setup-bazel@0.8.1
+        with:
+          bazelisk-cache: true
+          disk-cache: ${{ github.workflow }}
+          repository-cache: true
+      - name: 🔨 Test
+        run: bazel build //...

@@ -1,0 +1,45 @@
+// Copyright 2024 Oliver Eikemeier. All Rights Reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+// SPDX-License-Identifier: Apache-2.0
+
+package com.fillmore_labs.blog.run;
+
+import com.fillmore_labs.blog.jvt.Aggregate;
+import com.fillmore_labs.blog.jvt.Parallel2;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
+
+public final class Run3 {
+  private static final int sequence = 27;
+
+  public static Aggregate.Mean run(int c) throws ExecutionException, InterruptedException {
+    var s = new Aggregate();
+
+    try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
+      var p = new Parallel2(executor);
+
+      for (int i = 0; i < c; i++) {
+        var queryStart = Instant.now();
+
+        p.fibonacci(sequence);
+        s.add(Duration.between(queryStart, Instant.now()));
+      }
+    }
+
+    return s.result();
+  }
+}
