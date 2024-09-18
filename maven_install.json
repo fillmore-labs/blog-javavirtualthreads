@@ -592,5 +592,12 @@
       "org.ow2.asm:asm"
     ]
   },
+  "services": {
+    "org.openjdk.jmh:jmh-generator-annprocess": {
+      "javax.annotation.processing.Processor": [
+        "org.openjdk.jmh.generators.BenchmarkProcessor"
+      ]
+    }
+  },
   "version": "2"
 }
